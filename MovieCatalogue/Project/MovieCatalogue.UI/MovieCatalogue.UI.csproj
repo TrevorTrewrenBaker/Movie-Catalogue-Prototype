@@ -13,9 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\MovieCatalogue.Application\MovieCatalogue.Application.csproj" />
-    <ProjectReference Include="..\..\MovieCatalogue.Infrastructure\MovieCatalogue.Infrastructure.csproj" />
     <ProjectReference Include="..\MovieCatalogue.Domain\MovieCatalogue.Domain.csproj" />
+    <ProjectReference Include="..\MovieCatalogue.Application\MovieCatalogue.Application.csproj" />
+    <ProjectReference Include="..\MovieCatalogue.Infrastructure\MovieCatalogue.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

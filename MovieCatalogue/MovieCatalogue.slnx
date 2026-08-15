@@ -1,13 +1,13 @@
 <Solution>
   <Folder Name="/Project/">
-    <Project Path="MovieCatalogue.Application/MovieCatalogue.Application.csproj" Id="f17f5eb9-fef1-41bd-8334-4ef9bb144b02" />
-    <Project Path="MovieCatalogue.Infrastructure/MovieCatalogue.Infrastructure.csproj" Id="8c07983b-2fa3-4e84-8291-bc2accb268ea" />
+    <Project Path="Project/MovieCatalogue.Application/MovieCatalogue.Application.csproj" Id="f17f5eb9-fef1-41bd-8334-4ef9bb144b02" />
+    <Project Path="Project/MovieCatalogue.Infrastructure/MovieCatalogue.Infrastructure.csproj" Id="8c07983b-2fa3-4e84-8291-bc2accb268ea" />
     <Project Path="Project/MovieCatalogue.Domain/MovieCatalogue.Domain.csproj" Id="d26f222b-e529-434a-a20a-cd386b0d01f6" />
     <Project Path="Project/MovieCatalogue.UI/MovieCatalogue.UI.csproj" />
   </Folder>
   <Folder Name="/Tests/">
-    <Project Path="MovieCatalogue.Application.Tests/MovieCatalogue.Application.Tests.csproj" Id="00e1a294-bc94-4f93-bd34-4b537a2ff0f3" />
-    <Project Path="MovieCatalogue.Domain.Tests/MovieCatalogue.Domain.Tests.csproj" Id="9917bf79-e752-4bd3-b631-77e27c0beb5d" />
-    <Project Path="MovieCatalogue.Infrastructure.Tests/MovieCatalogue.Infrastructure.Tests.csproj" Id="d762f8cb-bd53-4436-9b68-8959ecf4bb5b" />
+    <Project Path="Tests/MovieCatalogue.Application.Tests/MovieCatalogue.Application.Tests.csproj" Id="00e1a294-bc94-4f93-bd34-4b537a2ff0f3" />
+    <Project Path="Tests/MovieCatalogue.Domain.Tests/MovieCatalogue.Domain.Tests.csproj" Id="9917bf79-e752-4bd3-b631-77e27c0beb5d" />
+    <Project Path="Tests/MovieCatalogue.Infrastructure.Tests/MovieCatalogue.Infrastructure.Tests.csproj" Id="d762f8cb-bd53-4436-9b68-8959ecf4bb5b" />
   </Folder>
 </Solution>

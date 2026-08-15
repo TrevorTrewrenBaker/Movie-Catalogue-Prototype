@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MovieCatalogue.Application\MovieCatalogue.Application.csproj" />
-    <ProjectReference Include="..\Project\MovieCatalogue.Domain\MovieCatalogue.Domain.csproj" />
+    <ProjectReference Include="..\..\Project\MovieCatalogue.Domain\MovieCatalogue.Domain.csproj" />
+    <ProjectReference Include="..\..\Project\MovieCatalogue.Application\MovieCatalogue.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>
