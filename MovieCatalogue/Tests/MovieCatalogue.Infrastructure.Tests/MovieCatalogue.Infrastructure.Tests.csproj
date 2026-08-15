@@ -15,6 +15,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MovieCatalogue.Application\MovieCatalogue.Application.csproj" />
+    <ProjectReference Include="..\MovieCatalogue.Infrastructure\MovieCatalogue.Infrastructure.csproj" />
+    <ProjectReference Include="..\Project\MovieCatalogue.Domain\MovieCatalogue.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
 
