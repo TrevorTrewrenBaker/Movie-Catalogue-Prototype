@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using MediatR; 
 
 namespace MovieCatalogue.Application
 {
@@ -6,6 +7,8 @@ namespace MovieCatalogue.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
+            // Handlers are registered here
+            services.AddMediatR(typeof(DependencyInjection).Assembly);
             return services; 
         }
     }

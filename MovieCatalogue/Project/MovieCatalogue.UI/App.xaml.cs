@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using MovieCatalogue.Application;
 using MovieCatalogue.Infrastructure;
 using System.Windows;
