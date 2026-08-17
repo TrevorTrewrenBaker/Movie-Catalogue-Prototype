@@ -7,8 +7,8 @@ namespace MovieCatalogue.Domain.Tests
     {
         private static Movie CreateMovie(
             double rating = 7.0,
-            IReadOnlyList<Genre>? genres = null,
-            IReadOnlyList<CastMember>? cast = null) => new(
+            List<Genre>? genres = null,
+            List<CastMember>? cast = null) => new(
                 id: 1,
                 title: "Dune: Part Three",
                 rating: new Rating(rating),
@@ -40,8 +40,8 @@ namespace MovieCatalogue.Domain.Tests
             Assert.Equal(155, movie.Runtime.Minutes);
             Assert.Equal(new DateTime(2026, 3, 1), movie.ReleaseDate);
             Assert.Equal("The saga concludes.", movie.Overview);
-            Assert.Same(genres, movie.Genres);
-            Assert.Same(cast, movie.Cast);
+            Assert.Equal(genres, movie.Genres);
+            Assert.Equal(cast, movie.Cast);
         }
 
         [Fact]

@@ -6,8 +6,10 @@ namespace MovieCatalogue.Domain.Entities
 {
     public class Genre
     {
-        public int Id { get; }
-        public string Name { get; }
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+
+        private Genre() { }
 
         public Genre(int id, string name)
         {

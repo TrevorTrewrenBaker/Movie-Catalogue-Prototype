@@ -11,10 +11,11 @@ namespace MovieCatalogue.Application.Tests
         [Fact]
         public void Constructor_SetsMovieIdAndPreference()
         {
-            var command = new SetMoviePreferenceCommand(42, PreferenceType.Liked);
+            var command = new SetMoviePreferenceCommand(42, PreferenceType.Liked, WatchStatus.Watched);
 
             Assert.Equal(42, command.MovieId);
             Assert.Equal(PreferenceType.Liked, command.Preference);
+            Assert.Equal(WatchStatus.Watched, command.WatchStatus);
         }
     }
 }
