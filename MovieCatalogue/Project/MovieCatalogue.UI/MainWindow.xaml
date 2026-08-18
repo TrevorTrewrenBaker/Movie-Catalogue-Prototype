@@ -5,9 +5,12 @@
         Height="900" 
         Width="1400"
         WindowStartupLocation="CenterScreen"
-        Background="{DynamicResource BackgroundBrush}">
+        Background="{DynamicResource BackgroundBrush}"
+        xmlns:converters="clr-namespace:MovieCatalogue.UI.Converters">
 
     <Window.Resources>
+        <converters:PosterPathToImageSourceConverter x:Key="PosterPathToImageSourceConverter"/>
+        
         <!-- Movie Card Template -->
         <DataTemplate x:Key="MovieCardTemplate">
             <Border Style="{StaticResource CardStyle}" Margin="0,0,0,16">
@@ -24,13 +27,10 @@
                             CornerRadius="8" 
                             Background="{DynamicResource SurfaceVariantBrush}"
                             Margin="-12,-12,16,-12">
-                        <Image Stretch="UniformToFill" Width="154" Height="231">
-                            <Image.Source>
-                                <MultiBinding StringFormat="https://image.tmdb.org/t/p/w200{0}">
-                                    <Binding Path="PosterPath" />
-                                </MultiBinding>
-                            </Image.Source>
-                        </Image>
+                        <Image Stretch="UniformToFill" 
+                               Width="154" 
+                               Height="231"
+                               Source="{Binding PosterPath, Converter={StaticResource PosterPathToImageSourceConverter}}"/>
                     </Border>
 
                     <!-- Movie Details -->
@@ -64,7 +64,7 @@
                                            Foreground="{DynamicResource OnPrimaryBrush}">
                                     <TextBlock.Text>
                                         <MultiBinding StringFormat="⭐ {0:F1}">
-                                            <Binding Path="VoteAverage" />
+                                            <Binding Path="Rating.Value" />
                                         </MultiBinding>
                                     </TextBlock.Text>
                                 </TextBlock>

@@ -43,6 +43,9 @@ namespace MovieCatalogue.Infrastructure.Commands
                         existing.Rating = new Rating(movieSummary.VoteAverage);
                         existing.ReleaseDate = movieSummary.ReleaseDate ?? DateTime.MinValue;
                         existing.Overview = movieSummary.Overview ?? string.Empty;
+                        existing.PosterPath = movieSummary.PosterPath;
+                        existing.VoteCount = movieSummary.VoteCount;
+                        existing.Popularity = movieSummary.Popularity;
                         existing.Genres = ResolveGenres(movieSummary.GenreIds, genreCache);
 
                         continue;
@@ -58,7 +61,10 @@ namespace MovieCatalogue.Infrastructure.Commands
                         movieSummary.ReleaseDate ?? DateTime.MinValue,
                         movieSummary.Overview ?? string.Empty,
                         genres,
-                        new List<CastMember>()
+                        new List<CastMember>(),
+                        movieSummary.PosterPath,
+                        movieSummary.VoteCount,
+                        movieSummary.Popularity
                     );
 
                     _context.Movies.Add(movie);
