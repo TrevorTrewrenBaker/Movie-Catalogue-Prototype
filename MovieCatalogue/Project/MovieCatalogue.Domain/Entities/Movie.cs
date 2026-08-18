@@ -1,5 +1,4 @@
-﻿// MovieCatalogue.Domain/Entities/Movie.cs
-using MovieCatalogue.Domain.ValueObjects;
+﻿using MovieCatalogue.Domain.ValueObjects;
 
 namespace MovieCatalogue.Domain.Entities
 {
@@ -11,8 +10,10 @@ namespace MovieCatalogue.Domain.Entities
         public Runtime Runtime { get; set; }
         public DateTime ReleaseDate { get; set; }
         public string Overview { get; set; } = string.Empty;
+        public string? PosterPath { get; set; }
+        public int VoteCount { get; set; }
+        public double Popularity { get; set; }
 
-        // ✅ Change from IReadOnlyList to List (or ICollection)
         public List<Genre> Genres { get; set; } = new();
         public List<CastMember> Cast { get; set; } = new();
 
@@ -26,7 +27,10 @@ namespace MovieCatalogue.Domain.Entities
             DateTime releaseDate,
             string overview,
             List<Genre> genres,
-            List<CastMember> cast)
+            List<CastMember> cast,
+            string? posterPath = null,
+            int voteCount = 0,
+            double popularity = 0)
         {
             Id = id;
             Title = title;
@@ -36,6 +40,9 @@ namespace MovieCatalogue.Domain.Entities
             Overview = overview;
             Genres = genres ?? new();
             Cast = cast ?? new();
+            PosterPath = posterPath;
+            VoteCount = voteCount;
+            Popularity = popularity;
         }
 
         public bool IsHighlyRated => Rating.Value >= 8.0;
