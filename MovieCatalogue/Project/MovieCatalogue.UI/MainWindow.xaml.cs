@@ -36,6 +36,11 @@ namespace MovieCatalogue.UI
         {
             try
             {
+                if (_viewModel.LoadGenresCommand.CanExecute(null))
+                {
+                    await _viewModel.LoadGenresCommand.ExecuteAsync(null);
+                }
+
                 if (_viewModel.LoadTrendingCommand.CanExecute(null))
                 {
                     await _viewModel.LoadTrendingCommand.ExecuteAsync(null);
