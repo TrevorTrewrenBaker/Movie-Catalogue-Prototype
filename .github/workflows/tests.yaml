@@ -35,16 +35,16 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Restore dependencies
-        run: dotnet restore MovieCatalogue.slnx
+        run: dotnet restore MovieCatalogue/MovieCatalogue.slnx
 
       - name: Check code formatting
-        run: dotnet format MovieCatalogue.slnx --verify-no-changes
+        run: dotnet format MovieCatalogue/MovieCatalogue.slnx --verify-no-changes
 
       - name: Build
-        run: dotnet build MovieCatalogue.slnx --no-restore --configuration Release
+        run: dotnet build MovieCatalogue/MovieCatalogue.slnx --no-restore --configuration Release
 
       - name: Run tests with coverage
-        run: dotnet test MovieCatalogue.slnx --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./coverage --logger "trx;LogFileName=test-results.trx"
+        run: dotnet test MovieCatalogue/MovieCatalogue.slnx --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./coverage --logger "trx;LogFileName=test-results.trx"
 
       - name: Publish test results
         if: always()
