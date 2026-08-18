@@ -92,10 +92,13 @@ public partial class MainViewModel : ObservableObject
             _allMovies = results.ToList();
             ApplyFilter();
         }
+        catch (OperationCanceledException)
+        {
+            // User cancelled, do nothing
+        }
         catch (Exception ex)
         {
-            ErrorMessage = "Something went wrong loading movies. Please try again.";
-            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            ErrorMessage = "Unable to load movies. Please check your connection and try again.";
         }
         finally
         {
