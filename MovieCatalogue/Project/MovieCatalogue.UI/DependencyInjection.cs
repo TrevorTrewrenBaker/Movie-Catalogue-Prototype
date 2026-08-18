@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MovieCatalogue.UI;
+using MovieCatalogue.UI.ViewModels;
 
-namespace MovieCatalogue.Application
+namespace MovieCatalogue.UI
 {
     public static class DependencyInjection
     {
         public static IServiceCollection AddViewModels(this IServiceCollection services)
         {
-            //services.AddTransient<MainViewModel>();
+            services.AddTransient<MainViewModel>();
             return services;
         }
 

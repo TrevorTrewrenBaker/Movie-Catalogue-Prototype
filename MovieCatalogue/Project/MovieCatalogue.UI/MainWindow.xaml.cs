@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using MovieCatalogue.UI.ViewModels;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,9 +17,35 @@ namespace MovieCatalogue.UI
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        private readonly MainViewModel _viewModel;
+
+        public MainWindow(MainViewModel viewModel)
         {
             InitializeComponent();
+            _viewModel = viewModel;
+            DataContext = _viewModel;
+
+            // Load data when window loads
+            Loaded += async (s, e) =>
+            {
+                await LoadDataAsync().ConfigureAwait(true);
+            };
+        }
+
+        private async Task LoadDataAsync()
+        {
+            try
+            {
+                if (_viewModel.LoadTrendingCommand.CanExecute(null))
+                {
+                    await _viewModel.LoadTrendingCommand.ExecuteAsync(null);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading data: {ex.Message}", "Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

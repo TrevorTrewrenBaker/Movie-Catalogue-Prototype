@@ -1,0 +1,31 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <DropShadowEffect x:Key="Elevation0Effect" Opacity="0"/>
+
+    <DropShadowEffect x:Key="Elevation1Effect"
+                       Color="{StaticResource ShadowTintColor}"
+                       Direction="270" ShadowDepth="1"
+                       BlurRadius="4" Opacity="0.30"/>
+
+    <DropShadowEffect x:Key="Elevation2Effect"
+                       Color="{StaticResource ShadowTintColor}"
+                       Direction="270" ShadowDepth="2"
+                       BlurRadius="8" Opacity="0.25"/>
+
+    <DropShadowEffect x:Key="Elevation3Effect"
+                       Color="{StaticResource ShadowTintColor}"
+                       Direction="270" ShadowDepth="4"
+                       BlurRadius="12" Opacity="0.22"/>
+
+    <DropShadowEffect x:Key="Elevation4Effect"
+                       Color="{StaticResource ShadowTintColor}"
+                       Direction="270" ShadowDepth="6"
+                       BlurRadius="16" Opacity="0.20"/>
+
+    <DropShadowEffect x:Key="Elevation5Effect"
+                       Color="{StaticResource ShadowTintColor}"
+                       Direction="270" ShadowDepth="8"
+                       BlurRadius="20" Opacity="0.18"/>
+
+</ResourceDictionary>
