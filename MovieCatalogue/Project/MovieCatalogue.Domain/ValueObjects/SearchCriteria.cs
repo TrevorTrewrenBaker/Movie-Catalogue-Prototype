@@ -18,15 +18,15 @@ namespace MovieCatalogue.Domain.ValueObjects
             double? minRating = null, int? actorId = null,
             PreferenceType? preferenceFilter = null, WatchStatus? watchStatus = null)
         {
-            Title = title; 
-            GenreId = genreId; 
+            Title = title;
+            GenreId = genreId;
             MinRating = minRating;
-            ActorId = actorId; 
+            ActorId = actorId;
             PreferenceFilter = preferenceFilter;
             WatchStatus = watchStatus;
         }
 
         public bool IsEmpty => Title is null && GenreId is null && MinRating is null
-            && ActorId is null && PreferenceFilter is null && WatchStatus is null; 
+            && ActorId is null && PreferenceFilter is null && WatchStatus is null;
     }
 }

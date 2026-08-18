@@ -12,7 +12,7 @@ namespace MovieCatalogue.Domain.Tests
 
             Assert.Equal(42, preference.MovieId);
             Assert.Equal(PreferenceType.Liked, preference.Preference);
-            Assert.Equal(WatchStatus.Watched, preference.WatchStatus); 
+            Assert.Equal(WatchStatus.Watched, preference.WatchStatus);
         }
 
         [Theory]

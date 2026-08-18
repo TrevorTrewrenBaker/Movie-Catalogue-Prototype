@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MediatR; 
+using MediatR;
 
 namespace MovieCatalogue.Application
 {
@@ -9,7 +9,7 @@ namespace MovieCatalogue.Application
         {
             // Handlers are registered here
             services.AddMediatR(typeof(DependencyInjection).Assembly);
-            return services; 
+            return services;
         }
     }
 }
