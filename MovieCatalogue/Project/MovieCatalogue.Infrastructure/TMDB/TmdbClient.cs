@@ -49,5 +49,66 @@ namespace MovieCatalogue.Infrastructure.Tmdb
             return response?.Results.Select(dto => dto.ToMovieSummary()).ToList()
                 ?? new List<MovieSummary>();
         }
+
+        public static string BuildDiscoverSearchQuery(DiscoverMoviesOptions options)
+        {
+            var query = new List<string>
+            {
+                $"page={options.Page}",
+                $"sort_by={options.SortBy}"
+            };
+
+            if (options.GenreId.HasValue) query.Add($"with_genres={options.GenreId}");
+            if (options.Year.HasValue) query.Add($"primary_release_year={options.Year}");
+            if (options.MinRating.HasValue) query.Add($"vote_average.gte={options.MinRating}");
+            if (options.MinVoteCount.HasValue) query.Add($"vote_count.gte={options.MinVoteCount}");
+            if (options.PersonId.HasValue) query.Add($"with_cast={options.PersonId}");
+            if (options.KeywordId.HasValue) query.Add($"with_keywords={options.KeywordId}");
+
+            return string.Join("&", query);
+        }
+
+        public async Task<IReadOnlyList<MovieSummary>> DiscoverMoviesAsync(
+            DiscoverMoviesOptions options, CancellationToken ct = default)
+        {
+            var url = $"discover/movie?{BuildDiscoverSearchQuery(options)}";
+
+            var response = await _httpClient.GetFromJsonAsync<TmdbPagedResponseDto<TmdbMovieSummaryDto>>(url, ct);
+
+            return response?.Results.Select(dto => dto.ToMovieSummary()).ToList()
+                ?? new List<MovieSummary>();
+        }
+
+        public async Task<int?> FindPersonIdAsync(string name, CancellationToken ct = default)
+        {
+            if (string.IsNullOrWhiteSpace(name)) return null;
+
+            var url = $"search/person?query={Uri.EscapeDataString(name)}";
+            var response = await _httpClient.GetFromJsonAsync<TmdbPagedResponseDto<TmdbPersonDto>>(url, ct);
+
+            return response?.Results.FirstOrDefault()?.Id;
+        }
+
+        public async Task<int?> FindKeywordIdAsync(string name, CancellationToken ct = default)
+        {
+            if (string.IsNullOrWhiteSpace(name)) return null;
+
+            var url = $"search/keyword?query={Uri.EscapeDataString(name)}";
+            var response = await _httpClient.GetFromJsonAsync<TmdbPagedResponseDto<TmdbKeywordDto>>(url, ct);
+
+            return response?.Results.FirstOrDefault()?.Id;
+        }
+
+        public async Task<IReadOnlyList<MultiSearchResult>> SearchMultiAsync(
+            string query, int page = 1, CancellationToken ct = default)
+        {
+            if (string.IsNullOrWhiteSpace(query)) return new List<MultiSearchResult>();
+
+            var url = $"search/multi?query={Uri.EscapeDataString(query)}&page={page}";
+            var response = await _httpClient.GetFromJsonAsync<TmdbPagedResponseDto<TmdbMultiSearchDto>>(url, ct);
+
+            return response?.Results.Select(dto => dto.ToMultiSearchResult()).ToList()
+                ?? new List<MultiSearchResult>();
+        }
     }
 }

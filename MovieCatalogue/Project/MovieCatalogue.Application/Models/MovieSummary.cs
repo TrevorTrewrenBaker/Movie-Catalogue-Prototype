@@ -10,7 +10,6 @@ namespace MovieCatalogue.Application.Models
         public string Title { get; set; } = string.Empty;
         public string Overview { get; set; } = string.Empty;
         public string? PosterUrl { get; set; }
-        public string? BackdropUrl { get; set; }
         public DateOnly? ReleaseDate { get; set; }
         public double VoteAverage { get; set; }
         public int VoteCount { get; set; }
