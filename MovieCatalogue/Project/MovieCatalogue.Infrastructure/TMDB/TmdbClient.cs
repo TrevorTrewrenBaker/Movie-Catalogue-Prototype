@@ -2,7 +2,7 @@
 using MovieCatalogue.Application.Models;
 using MovieCatalogue.Domain.Entities;
 using MovieCatalogue.Infrastructure.TMDB.Dtos;
-using MovieCatalogue.Infrastructure.TMDB; 
+using MovieCatalogue.Infrastructure.TMDB;
 using System.Net.Http.Json;
 
 namespace MovieCatalogue.Infrastructure.Tmdb
@@ -24,7 +24,7 @@ namespace MovieCatalogue.Infrastructure.Tmdb
             if (dto is null)
                 throw new InvalidOperationException($"TMDB returned no data for movie {movieId}");
 
-            return dto.ToMovie(); 
+            return dto.ToMovie();
         }
 
         public async Task<IReadOnlyList<MovieSummary>> GetTrendingAsync(CancellationToken ct = default)
