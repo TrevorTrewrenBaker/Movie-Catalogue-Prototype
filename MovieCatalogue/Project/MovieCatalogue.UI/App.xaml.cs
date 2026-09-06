@@ -16,8 +16,6 @@ namespace MovieCatalogue.UI
 
         public static string CurrentTheme { get; set; } = "Light";
 
-        private const string tmdbAccessToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3MTk0NTVmZDgwNWQ1MzZlZDZhNGQ5OTRhM2UzNjI3YSIsIm5iZiI6MTc4NjcwMjg4Ny4wMzQsInN1YiI6IjZhN2VlYzI3YjEwZDBiZDA5OGJmOGQ5NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.d-BXhmFbeWc0C-5B5GAbtlOJ7Dwi2rWpbpMo21uWYKc";
-
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -37,14 +35,6 @@ namespace MovieCatalogue.UI
 
             services.AddViewModels();
             services.AddViews();
-
-            services.AddHttpClient<TmdbClient>(client =>
-            {
-                client.BaseAddress = new Uri("https://api.themoviedb.org/3/");
-                client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", tmdbAccessToken);
-            });
-
 
             Services = services.BuildServiceProvider();
 
