@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Moq;
+using MovieCatalogue.Application.Interfaces;
 using MovieCatalogue.Application.Queries;
 using MovieCatalogue.Domain.Entities;
 using MovieCatalogue.Domain.ValueObjects;
@@ -8,6 +10,14 @@ namespace MovieCatalogue.Infrastructure.Tests
 {
     public class DiscoverMoviesQueryHandlerTests
     {
+        private static Mock<ITmdbClient> CreateOfflineTmdbClientMock()
+        {
+            var mock = new Mock<ITmdbClient>();
+            mock.Setup(c => c.DiscoverMoviesAsync(It.IsAny<Application.Models.DiscoverMoviesOptions>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new HttpRequestException("Simulated offline"));
+            return mock;
+        }
+
         [Fact]
         public async Task Handle_FiltersByGenre()
         {
@@ -19,7 +29,7 @@ namespace MovieCatalogue.Infrastructure.Tests
                     genres: [new Genre(18, "Drama")], cast: []));
             await context.SaveChangesAsync();
 
-            var handler = new DiscoverMoviesQueryHandler(context);
+            var handler = new DiscoverMoviesQueryHandler(CreateOfflineTmdbClientMock().Object, context);
             var result = await handler.Handle(new DiscoverMoviesQuery(new SearchCriteria(genreId: 28)), CancellationToken.None);
 
             Assert.Single(result);
@@ -37,7 +47,7 @@ namespace MovieCatalogue.Infrastructure.Tests
                     genres: [], cast: [new CastMember(600, "Someone Else")]));
             await context.SaveChangesAsync();
 
-            var handler = new DiscoverMoviesQueryHandler(context);
+            var handler = new DiscoverMoviesQueryHandler(CreateOfflineTmdbClientMock().Object, context);
             var result = await handler.Handle(new DiscoverMoviesQuery(new SearchCriteria(actorId: 500)), CancellationToken.None);
 
             Assert.Single(result);
@@ -59,7 +69,7 @@ namespace MovieCatalogue.Infrastructure.Tests
 
             await context.SaveChangesAsync();
 
-            var handler = new DiscoverMoviesQueryHandler(context);
+            var handler = new DiscoverMoviesQueryHandler(CreateOfflineTmdbClientMock().Object, context);
             var criteria = new SearchCriteria(genreId: 878, minRating: 8.0);
             var result = await handler.Handle(new DiscoverMoviesQuery(criteria), CancellationToken.None);
 
@@ -75,7 +85,7 @@ namespace MovieCatalogue.Infrastructure.Tests
                 genres: [new Genre(878, "Sci-Fi")], cast: []));
             await context.SaveChangesAsync();
 
-            var handler = new DiscoverMoviesQueryHandler(context);
+            var handler = new DiscoverMoviesQueryHandler(CreateOfflineTmdbClientMock().Object, context);
             var result = await handler.Handle(new DiscoverMoviesQuery(new SearchCriteria(genreId: 99999)), CancellationToken.None);
 
             Assert.Empty(result);

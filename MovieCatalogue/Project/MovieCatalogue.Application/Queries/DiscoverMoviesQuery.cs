@@ -1,10 +1,10 @@
 ﻿using MediatR;
-using MovieCatalogue.Domain.Entities;
+using MovieCatalogue.Application.Models;
 using MovieCatalogue.Domain.ValueObjects;
 
 namespace MovieCatalogue.Application.Queries
 {
-    public record DiscoverMoviesQuery : IRequest<IReadOnlyList<Movie>>
+    public record DiscoverMoviesQuery : IRequest<IReadOnlyList<MovieSummary>>
     {
         public SearchCriteria Criteria { get; }
 

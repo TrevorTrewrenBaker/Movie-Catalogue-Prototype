@@ -1,6 +1,4 @@
-﻿// MovieCatalogue.Infrastructure/TMDB/Dtos/TmdbMovieSummaryDto.cs
-using MovieCatalogue.Domain.Entities;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace MovieCatalogue.Infrastructure.TMDB.Dtos
 {
@@ -33,6 +31,7 @@ namespace MovieCatalogue.Infrastructure.TMDB.Dtos
 
         public double Popularity { get; set; }
 
+        [JsonPropertyName("genre_ids")]
         public List<int> GenreIds { get; set; } = new();
     }
 
