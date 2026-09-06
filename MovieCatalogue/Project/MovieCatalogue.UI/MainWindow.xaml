@@ -10,7 +10,7 @@
 
     <Window.Resources>
         <converters:PosterPathToImageSourceConverter x:Key="PosterPathToImageSourceConverter"/>
-        
+
         <!-- Movie Card Template -->
         <DataTemplate x:Key="MovieCardTemplate">
             <Border Style="{StaticResource CardStyle}" Margin="0,0,0,16">
@@ -30,7 +30,7 @@
                         <Image Stretch="UniformToFill" 
                                Width="154" 
                                Height="231"
-                               Source="{Binding PosterPath, Converter={StaticResource PosterPathToImageSourceConverter}}"/>
+                               Source="{Binding PosterUrl, Converter={StaticResource PosterPathToImageSourceConverter}}"/>
                     </Border>
 
                     <!-- Movie Details -->
@@ -64,7 +64,7 @@
                                            Foreground="{DynamicResource OnPrimaryBrush}">
                                     <TextBlock.Text>
                                         <MultiBinding StringFormat="⭐ {0:F1}">
-                                            <Binding Path="Rating.Value" />
+                                            <Binding Path="VoteAverage" />
                                         </MultiBinding>
                                     </TextBlock.Text>
                                 </TextBlock>
@@ -112,6 +112,7 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -218,8 +219,77 @@
             </Grid>
         </Border>
 
+        <!-- ===== ADVANCED SEARCH PANEL ===== -->
+        <Expander Grid.Row="2" 
+                  Header="⚙️ Advanced Search" 
+                  IsExpanded="{Binding IsAdvancedSearchOpen}"
+                  Background="{DynamicResource SurfaceContainerBrush}"
+                  Foreground="{DynamicResource OnSurfaceBrush}"
+                  BorderBrush="{DynamicResource SurfaceContainerHighBrush}"
+                  BorderThickness="0,0,0,1"
+                  Padding="32,8">
+            <Grid Margin="0,12,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                    <TextBlock Text="Year" FontSize="12" Foreground="{DynamicResource OnSurfaceVariantBrush}" Margin="0,0,0,4" />
+                    <TextBox Text="{Binding FilterYear, UpdateSourceTrigger=PropertyChanged}" 
+                             Padding="10,8"
+                             Background="{DynamicResource SurfaceBrush}"
+                             Foreground="{DynamicResource OnSurfaceBrush}"
+                             BorderBrush="{DynamicResource SurfaceVariantBrush}" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Margin="8,0">
+                    <TextBlock Text="Min Rating" FontSize="12" Foreground="{DynamicResource OnSurfaceVariantBrush}" Margin="0,0,0,4" />
+                    <TextBox Text="{Binding FilterMinRating, UpdateSourceTrigger=PropertyChanged}" 
+                             Padding="10,8"
+                             Background="{DynamicResource SurfaceBrush}"
+                             Foreground="{DynamicResource OnSurfaceBrush}"
+                             BorderBrush="{DynamicResource SurfaceVariantBrush}" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Margin="8,0">
+                    <TextBlock Text="Actor Name" FontSize="12" Foreground="{DynamicResource OnSurfaceVariantBrush}" Margin="0,0,0,4" />
+                    <TextBox Text="{Binding FilterActorName, UpdateSourceTrigger=PropertyChanged}" 
+                             Padding="10,8"
+                             Background="{DynamicResource SurfaceBrush}"
+                             Foreground="{DynamicResource OnSurfaceBrush}"
+                             BorderBrush="{DynamicResource SurfaceVariantBrush}" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="3" Margin="8,0">
+                    <TextBlock Text="Sort By" FontSize="12" Foreground="{DynamicResource OnSurfaceVariantBrush}" Margin="0,0,0,4" />
+                    <ComboBox SelectedValue="{Binding SortBy}" 
+                              SelectedValuePath="Tag" 
+                              Padding="10,8"
+                              Background="{DynamicResource SurfaceBrush}"
+                              Foreground="{DynamicResource OnSurfaceBrush}"
+                              BorderBrush="{DynamicResource SurfaceVariantBrush}">
+                        <ComboBoxItem Content="Popularity" Tag="popularity.desc" IsSelected="True" />
+                        <ComboBoxItem Content="Rating" Tag="vote_average.desc" />
+                        <ComboBoxItem Content="Release Date" Tag="release_date.desc" />
+                    </ComboBox>
+                </StackPanel>
+
+                <Button Grid.Column="4" 
+                        Content="Apply Filters"
+                        Command="{Binding ApplyAdvancedSearchCommand}"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Margin="12,18,0,0"
+                        Padding="20,10" 
+                        VerticalAlignment="Top"/>
+            </Grid>
+        </Expander>
+
         <!-- ===== MOVIE LIST ===== -->
-        <Grid Grid.Row="2" Background="{DynamicResource BackgroundBrush}">
+        <Grid Grid.Row="3" Background="{DynamicResource BackgroundBrush}">
             <!-- Loading Overlay -->
             <Border Background="{DynamicResource SurfaceBrush}" Opacity="0.9">
                 <Border.Style>
@@ -256,12 +326,13 @@
             <!-- Movie List -->
             <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="32,24">
                 <StackPanel>
-                    <!-- Results Count -->
+                    <!-- View Mode / Results Count -->
                     <TextBlock FontSize="14" 
                                Foreground="{DynamicResource OnSurfaceVariantBrush}" 
                                Margin="0,0,0,16">
                         <TextBlock.Text>
-                            <MultiBinding StringFormat="📊 Showing {0} movies">
+                            <MultiBinding StringFormat="{}{0} · Showing {1} movies">
+                                <Binding Path="ViewModeLabel" />
                                 <Binding Path="Movies.Count" />
                             </MultiBinding>
                         </TextBlock.Text>
@@ -327,12 +398,39 @@
                     <!-- Movie Items -->
                     <ItemsControl ItemsSource="{Binding Movies}" 
                                   ItemTemplate="{StaticResource MovieCardTemplate}" />
+
+                    <!-- Pagination Controls -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,24,0,0">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentView}" Value="DiscoverResults">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <Button Content="◀ Previous" 
+                                Command="{Binding PreviousPageCommand}"
+                                Padding="16,8" 
+                                Margin="0,0,12,0"/>
+                        <TextBlock Text="{Binding CurrentPage}" 
+                                   VerticalAlignment="Center" 
+                                   Foreground="{DynamicResource OnSurfaceBrush}"
+                                   FontWeight="SemiBold" 
+                                   Margin="8,0"/>
+                        <Button Content="Next ▶" 
+                                Command="{Binding NextPageCommand}"
+                                Padding="16,8" 
+                                Margin="12,0,0,0"/>
+                    </StackPanel>
                 </StackPanel>
             </ScrollViewer>
         </Grid>
 
         <!-- ===== STATUS BAR ===== -->
-        <Border Grid.Row="3" 
+        <Border Grid.Row="4" 
                 Background="{DynamicResource SurfaceContainerBrush}" 
                 Padding="32,12"
                 BorderBrush="{DynamicResource SurfaceContainerHighBrush}" 

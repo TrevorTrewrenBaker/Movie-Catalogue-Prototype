@@ -3,15 +3,16 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Http;
 using MovieCatalogue.Application.Commands;
 using MovieCatalogue.Application.Interfaces;
+using MovieCatalogue.Application.Models;
 using MovieCatalogue.Application.Queries;
 using MovieCatalogue.Domain.Entities;
 using MovieCatalogue.Infrastructure.Commands;
 using MovieCatalogue.Infrastructure.Persistence;
 using MovieCatalogue.Infrastructure.Queries;
 using MovieCatalogue.Infrastructure.Tmdb;
-using Microsoft.Extensions.Http;
 using System.Net.Http.Headers;
 
 namespace MovieCatalogue.Infrastructure
@@ -45,13 +46,16 @@ namespace MovieCatalogue.Infrastructure
 
             // MANUALLY register all handlers from Infrastructure
             services.AddScoped<IRequestHandler<GetTrendingMoviesQuery, IReadOnlyList<Movie>>, GetTrendingMoviesQueryHandler>();
-            services.AddScoped<IRequestHandler<SearchMoviesQuery, IReadOnlyList<Movie>>, SearchMoviesQueryHandler>();
-            services.AddScoped<IRequestHandler<DiscoverMoviesQuery, IReadOnlyList<Movie>>, DiscoverMoviesQueryHandler>();
+            services.AddScoped<IRequestHandler<SearchMoviesQuery, IReadOnlyList<MovieSummary>>, SearchMoviesQueryHandler>();
             services.AddScoped<IRequestHandler<GetMovieDetailsQuery, Movie>, GetMovieDetailsQueryHandler>();
             services.AddScoped<IRequestHandler<GetGenresQuery, IReadOnlyList<Genre>>, GetGenresQueryHandler>();
             services.AddScoped<IRequestHandler<GetMoviesByPreferenceQuery, IReadOnlyList<Movie>>, GetMoviesByPreferenceQueryHandler>();
             services.AddScoped<IRequestHandler<GetMoviesByWatchStatusQuery, IReadOnlyList<Movie>>, GetMoviesByWatchStatusQueryHandler>();
-            services.AddScoped<IRequestHandler<FindActorMoviesQuery, IReadOnlyList<Movie>>, FindActorMoviesQueryHandler>();
+            services.AddScoped<IRequestHandler<DiscoverMoviesQuery, IReadOnlyList<MovieSummary>>, DiscoverMoviesQueryHandler>();
+            services.AddScoped<IRequestHandler<FindActorMoviesQuery, IReadOnlyList<MovieSummary>>, FindActorMoviesQueryHandler>();
+            services.AddScoped<IRequestHandler<SearchByKeywordQuery, IReadOnlyList<MovieSummary>>, SearchByKeywordQueryHandler>();
+            services.AddScoped<IRequestHandler<SearchMultiQuery, IReadOnlyList<MultiSearchResult>>, SearchMultiQueryHandler>();
+
 
             // Commands
             services.AddScoped<IRequestHandler<SetMoviePreferenceCommand, Unit>, SetMoviePreferenceCommandHandler>();

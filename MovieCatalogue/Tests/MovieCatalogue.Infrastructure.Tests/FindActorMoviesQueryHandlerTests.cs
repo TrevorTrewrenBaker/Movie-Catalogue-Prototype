@@ -1,4 +1,6 @@
-﻿using MovieCatalogue.Application.Queries;
+﻿using Moq;
+using MovieCatalogue.Application.Interfaces;
+using MovieCatalogue.Application.Queries;
 using MovieCatalogue.Domain.Entities;
 using MovieCatalogue.Domain.ValueObjects;
 using MovieCatalogue.Infrastructure.Queries;
@@ -16,7 +18,11 @@ namespace MovieCatalogue.Infrastructure.Tests
             context.Movies.Add(movie);
             await context.SaveChangesAsync();
 
-            var handler = new FindActorMoviesQueryHandler(context);
+            var tmdbMock = new Mock<ITmdbClient>();
+            tmdbMock.Setup(c => c.FindPersonIdAsync("Nonexistent Actor", It.IsAny<CancellationToken>()))
+                .ReturnsAsync((int?)null);
+
+            var handler = new FindActorMoviesQueryHandler(tmdbMock.Object, context);
             var result = await handler.Handle(new FindActorMoviesQuery("Nonexistent Actor"), CancellationToken.None);
 
             Assert.Empty(result);
