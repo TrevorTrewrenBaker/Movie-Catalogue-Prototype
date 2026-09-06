@@ -51,5 +51,16 @@ namespace MovieCatalogue.Infrastructure.TMDB
             };
         }
 
+        public static MultiSearchResult ToMultiSearchResult(this TmdbMultiSearchDto dto)
+        {
+            return new MultiSearchResult
+            {
+                Id = dto.Id,
+                MediaType = dto.MediaType,
+                DisplayName = dto.MediaType == "movie" ? dto.Title ?? "" : dto.Name ?? "",
+                ImageUrl = dto.MediaType == "person" ? dto.ProfilePath : dto.PosterPath
+            };
+        }
+
     }
 }
