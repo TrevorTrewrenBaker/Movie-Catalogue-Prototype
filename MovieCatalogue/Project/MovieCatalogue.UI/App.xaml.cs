@@ -16,7 +16,7 @@ namespace MovieCatalogue.UI
 
         public static string CurrentTheme { get; set; } = "Light";
 
-        private const string tmdbAccessToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3MTk0NTVmZDgwNWQ1MzZlZDZhNGQ5OTRhM2UzNjI3YSIsIm5iZiI6MTc4NjcwMjg4Ny4wMzQsInN1YiI6IjZhN2VlYzI3YjEwZDBiZDA5OGJmOGQ5NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.d-BXhmFbeWc0C-5B5GAbtlOJ7Dwi2rWpbpMo21uWYKc"; 
+        private const string tmdbAccessToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3MTk0NTVmZDgwNWQ1MzZlZDZhNGQ5OTRhM2UzNjI3YSIsIm5iZiI6MTc4NjcwMjg4Ny4wMzQsInN1YiI6IjZhN2VlYzI3YjEwZDBiZDA5OGJmOGQ5NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.d-BXhmFbeWc0C-5B5GAbtlOJ7Dwi2rWpbpMo21uWYKc";
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -50,7 +50,7 @@ namespace MovieCatalogue.UI
 
             Services.EnsureDatabaseCreated();
 
-            GenreSeedGenerator(); 
+            GenreSeedGenerator();
 
             // Fire-and-forget: UI shows cached data immediately via GetTrendingMoviesQuery,
             // this quietly refreshes the local DB in the background.
