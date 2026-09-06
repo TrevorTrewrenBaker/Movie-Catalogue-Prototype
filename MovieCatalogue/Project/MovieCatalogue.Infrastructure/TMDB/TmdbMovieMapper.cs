@@ -1,4 +1,5 @@
-﻿using MovieCatalogue.Domain.Entities;
+﻿using MovieCatalogue.Application.Models;
+using MovieCatalogue.Domain.Entities;
 using MovieCatalogue.Domain.ValueObjects;
 using MovieCatalogue.Infrastructure.TMDB.Dtos;
 
@@ -6,7 +7,7 @@ namespace MovieCatalogue.Infrastructure.TMDB
 {
     public static class TmdbMovieMapper
     {
-        public static Movie ToDomain(TmdbMovieDetailDto dto)
+        public static Movie ToMovie(this TmdbMovieDetailDto dto)
         {
             var genres = dto.Genres
                 .Select(g => new Genre(g.Id, g.Name))
@@ -30,6 +31,24 @@ namespace MovieCatalogue.Infrastructure.TMDB
                 overview: dto.Overview,
                 genres: genres,
                 cast: cast);
+        }
+
+        public static MovieSummary ToMovieSummary(this TmdbMovieSummaryDto dto)
+        {
+            return new MovieSummary
+            {
+                Id = dto.Id,
+                Title = dto.Title,
+                Overview = dto.Overview,
+                PosterUrl = string.IsNullOrEmpty(dto.PosterPath) ? null : dto.PosterPath,
+                ReleaseDate = dto.ReleaseDate.HasValue
+                    ? DateOnly.FromDateTime(dto.ReleaseDate.Value)
+                    : null,
+                VoteAverage = dto.VoteAverage,
+                VoteCount = dto.VoteCount,
+                GenreIds = dto.GenreIds,
+                Popularity = dto.Popularity,
+            };
         }
 
     }

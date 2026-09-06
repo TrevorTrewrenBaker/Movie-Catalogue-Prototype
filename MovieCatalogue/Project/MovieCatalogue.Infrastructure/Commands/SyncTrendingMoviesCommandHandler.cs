@@ -1,19 +1,20 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MovieCatalogue.Application.Commands;
+using MovieCatalogue.Application.Interfaces;
+using MovieCatalogue.Application.Models;
 using MovieCatalogue.Domain.Entities;
 using MovieCatalogue.Domain.ValueObjects;
 using MovieCatalogue.Infrastructure.Persistence;
-using MovieCatalogue.Infrastructure.Tmdb;
 
 namespace MovieCatalogue.Infrastructure.Commands
 {
     public class SyncTrendingMoviesCommandHandler : IRequestHandler<SyncTrendingMoviesCommand, Unit>
     {
-        private readonly TmdbClient _tmdbClient;
+        private readonly ITmdbClient _tmdbClient;
         private readonly IApplicationDbContext _context;
 
-        public SyncTrendingMoviesCommandHandler(TmdbClient tmdbClient, IApplicationDbContext context)
+        public SyncTrendingMoviesCommandHandler(ITmdbClient tmdbClient, IApplicationDbContext context)
         {
             _tmdbClient = tmdbClient;
             _context = context;
@@ -35,15 +36,17 @@ namespace MovieCatalogue.Infrastructure.Commands
 
                 foreach (var movieSummary in trendingMovies)
                 {
-                    if (existingMovies.ContainsKey(movieSummary.Id))
-                    {
-                        var existing = existingMovies[movieSummary.Id];
+                    var releaseDate = movieSummary.ReleaseDate.HasValue
+                        ? movieSummary.ReleaseDate.Value.ToDateTime(TimeOnly.MinValue)
+                        : DateTime.MinValue;
 
+                    if (existingMovies.TryGetValue(movieSummary.Id, out var existing))
+                    {
                         existing.Title = movieSummary.Title;
                         existing.Rating = new Rating(movieSummary.VoteAverage);
-                        existing.ReleaseDate = movieSummary.ReleaseDate ?? DateTime.MinValue;
+                        existing.ReleaseDate = releaseDate;
                         existing.Overview = movieSummary.Overview ?? string.Empty;
-                        existing.PosterPath = movieSummary.PosterPath;
+                        existing.PosterPath = movieSummary.PosterUrl;
                         existing.VoteCount = movieSummary.VoteCount;
                         existing.Popularity = movieSummary.Popularity;
                         existing.Genres = ResolveGenres(movieSummary.GenreIds, genreCache);
@@ -58,11 +61,11 @@ namespace MovieCatalogue.Infrastructure.Commands
                         movieSummary.Title,
                         new Rating(movieSummary.VoteAverage),
                         new Runtime(0),
-                        movieSummary.ReleaseDate ?? DateTime.MinValue,
+                        releaseDate,
                         movieSummary.Overview ?? string.Empty,
                         genres,
                         new List<CastMember>(),
-                        movieSummary.PosterPath,
+                        movieSummary.PosterUrl,
                         movieSummary.VoteCount,
                         movieSummary.Popularity
                     );
@@ -80,7 +83,7 @@ namespace MovieCatalogue.Infrastructure.Commands
             }
         }
 
-        private static List<Genre> ResolveGenres(List<int> genreIds, Dictionary<int, Genre> genreCache)
+        private static List<Genre> ResolveGenres(IReadOnlyList<int> genreIds, Dictionary<int, Genre> genreCache)
         {
             return genreIds
                 .Where(id => genreCache.ContainsKey(id))

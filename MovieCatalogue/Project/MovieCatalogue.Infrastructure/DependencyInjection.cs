@@ -4,11 +4,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MovieCatalogue.Application.Commands;
+using MovieCatalogue.Application.Interfaces;
 using MovieCatalogue.Application.Queries;
 using MovieCatalogue.Domain.Entities;
 using MovieCatalogue.Infrastructure.Commands;
 using MovieCatalogue.Infrastructure.Persistence;
 using MovieCatalogue.Infrastructure.Queries;
+using MovieCatalogue.Infrastructure.Tmdb;
+using Microsoft.Extensions.Http;
+using System.Net.Http.Headers;
 
 namespace MovieCatalogue.Infrastructure
 {
@@ -28,9 +32,13 @@ namespace MovieCatalogue.Infrastructure
             services.AddScoped<IApplicationDbContext>(provider =>
                 provider.GetRequiredService<MovieDbContext>());
 
-            // 3. Register Repositories (Application Layer interfaces)
-            //     services.AddScoped<IMovieRepository, MovieRepository>();
-            //     services.AddScoped<IPreferencesRepository, PreferencesRepository>();
+            // 3. Register TMDB client (interface -> implementation)
+            services.AddHttpClient<ITmdbClient, TmdbClient>(client =>
+            {
+                client.BaseAddress = new Uri("https://api.themoviedb.org/3/");
+                client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", configuration["Tmdb:AccessToken"]);
+            });
 
             // Register MediatR
             services.AddMediatR(typeof(DependencyInjection).Assembly);
